@@ -1,60 +1,65 @@
-import React, {useEffect, useState} from 'react';
+import React, { useState, useEffect } from "react";
+import useDraggable from "./hooks/use-draggable";
+import TilePalette from "./Components/tile-palette";
+import Map from "./Components/map";
 import Player from './Components/player';
 
 export default function App() {
-const [position, setPosition]= useState ({
-  x: 0, y: 0
-})
+  const [tileset, setTileset] = useState("rpg-nature-tileset/winter");
+  const [activeTile, setActiveTile] = useState({ x: 1 * 32, y: 4 * 32 });
+  const [tiles, setTiles] = useState([]);
+  const [mapSize, setMapSize] = useState({
+    width: 800,
+    height: 600,
+  });
+  const { position } = useDraggable("handle");
 
-useEffect(() => {
-  const handle = document.getElementById('handle')
-  handle.addEventListener('mousedown', function(e) {
-    e.preventDefault()
-    handle.style.pointerEvents = 'none'
+  useEffect(() => {
+    const _tiles = [];
+    let id = 0;
 
-    document.body.addEventListener('mousemove', move)
-    document.body.addEventListener('mouseup', () => {
-      document.body.removeEventListener('mousemove', move)
-      handle.style.pointerEvents = 'initial'
-    })
-  })
-  return () => {
-    document.body.removeEventListener('mousedown', move)
-    document.body.removeEventListener('mouseup', move)
-    document.body.removeEventListener('mousemove', move)
+    for (let y = 0; y < mapSize.height; y = y + 32) {
+      const row = [];
+      for (let x = 0; x < mapSize.width; x = x + 32) {
+        row.push({ x, y, id: id++, v: { x: -32, y: -32 } });
+      }
+      _tiles.push(row);
+    }
+    setTiles(_tiles);
+  }, []);
 
-  }
-}, [])
-function move(e) {
-  const pos = {
-    x: e.clientX,
-    y: e.clientY
-  }
-  setPosition(pos)
-}
   return (
-    <div style={{
-      position: 'relative',
-      width: window.innerWidth,
-      height: window.innerHeight,
-      backgroundColor: 'grey',
-      overflow: 'hidden',
-      border: '1px solid black'
-    }}>
-      <div style={{
-        position: 'absolute',
-        border: '1px solid black',
-        top: position.y,
-        left: position.x,
-        zIndex: 100,
-        width: 200,
-        height: 200,
-        backgroundColor: 'white'
-      }}>
-        <img id='handle' src='/img/drag-handle.png' alt=''/>
-      </div>
+    <div
+      style={{
+        position: "relative",
+        width: window.innerWidth,
+        height: window.innerHeight,
+        backgroundColor: "grey",
+        overflow: "hidden",
+        border: "1px solid black",
+      }}
+    >
+      <TilePalette
+        position={position}
+        tileset={tileset}
+        activeTile={activeTile}
+        setActiveTile={setActiveTile}
+        size={{
+          width: 640,
+          height: 288,
+        }}
+      />
+
+      <Map
+        tiles={tiles}
+        tileset={tileset}
+        size={mapSize}
+        activeTile={activeTile}
+        setTiles={setTiles}
+      />
+      <div>
         <Player skin='m'/>
+      </div>
     </div>
   );
 }
-

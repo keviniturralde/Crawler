@@ -1,25 +1,60 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {useEffect, useState} from 'react';
+import Player from './Components/player';
 
-function App() {
+export default function App() {
+const [position, setPosition]= useState ({
+  x: 0, y: 0
+})
+
+useEffect(() => {
+  const handle = document.getElementById('handle')
+  handle.addEventListener('mousedown', function(e) {
+    e.preventDefault()
+    handle.style.pointerEvents = 'none'
+
+    document.body.addEventListener('mousemove', move)
+    document.body.addEventListener('mouseup', () => {
+      document.body.removeEventListener('mousemove', move)
+      handle.style.pointerEvents = 'initial'
+    })
+  })
+  return () => {
+    document.body.removeEventListener('mousedown', move)
+    document.body.removeEventListener('mouseup', move)
+    document.body.removeEventListener('mousemove', move)
+
+  }
+}, [])
+function move(e) {
+  const pos = {
+    x: e.clientX,
+    y: e.clientY
+  }
+  setPosition(pos)
+}
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={{
+      position: 'relative',
+      width: window.innerWidth,
+      height: window.innerHeight,
+      backgroundColor: 'grey',
+      overflow: 'hidden',
+      border: '1px solid black'
+    }}>
+      <div style={{
+        position: 'absolute',
+        border: '1px solid black',
+        top: position.y,
+        left: position.x,
+        zIndex: 100,
+        width: 200,
+        height: 200,
+        backgroundColor: 'white'
+      }}>
+        <img id='handle' src='/img/drag-handle.png' alt=''/>
+      </div>
+        <Player skin='m'/>
     </div>
   );
 }
 
-export default App;

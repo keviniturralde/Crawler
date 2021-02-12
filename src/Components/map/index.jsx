@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Map({ tiles, setTiles, activeTile, tileset, size }) {
+export default function Map({ tiles, setTiles, activeTile, tileset, size, bgTile}) {
   function cloneMatrix(m) {
     const clone = new Array(m.length);
     for (let i = 0; i < m.length; ++i) {

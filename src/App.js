@@ -8,6 +8,7 @@ export default function App() {
   const [tileset, setTileset] = useState("rpg-nature-tileset/winter");
   const [activeTile, setActiveTile] = useState({ x: 1 * 32, y: 4 * 32 });
   const [tiles, setTiles] = useState([]);
+  const [bgTile, setBgTile] = useState({ x: -32, y: -32})
   const [mapSize, setMapSize] = useState({
     width: 800,
     height: 600,
@@ -42,12 +43,14 @@ export default function App() {
       <TilePalette
         position={position}
         tileset={tileset}
+        setTileset={setTileset}
         activeTile={activeTile}
         setActiveTile={setActiveTile}
-        size={{
-          width: 640,
-          height: 288,
-        }}
+        setBgTile={setBgTile}
+        // size={{
+        //   width: 640,
+        //   height: 288,
+        // }}
       />
 
       <Map
@@ -56,6 +59,7 @@ export default function App() {
         size={mapSize}
         activeTile={activeTile}
         setTiles={setTiles}
+        bgTile={bgTile}
       />
       <div>
         <Player skin='m'/>

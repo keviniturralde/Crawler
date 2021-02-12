@@ -28,6 +28,25 @@ export default function Map({ tiles, setTiles, activeTile, tileset, size, bgTile
         width: size.width,
       }}
     >
+      <div style={{ position: 'absolute', zIndex: 1}}>
+      {tiles.map((row, y) => (
+        <div style={{ display: "flex" }}>
+          {row.map((tile, x) => (
+            <div
+              onClick={() => dropTile({ x, y })}
+              style={{
+                borderBottom: "1px solid #333",
+                borderRight: "1px solid #333",
+                background: `url(/sprites/${tileset}.png) -${bgTile.x}px -${bgTile.y}px no-repeat`,
+                width: 32,
+                height: 32,
+              }}
+            />
+          ))}
+        </div>
+      ))}
+      </div>
+      <div style={{ position: 'absolute', zIndex: 2}}>
       {tiles.map((row, y) => (
         <div style={{ display: "flex" }}>
           {row.map((tile, x) => (
@@ -44,6 +63,7 @@ export default function Map({ tiles, setTiles, activeTile, tileset, size, bgTile
           ))}
         </div>
       ))}
+      </div>
     </div>
   );
 }

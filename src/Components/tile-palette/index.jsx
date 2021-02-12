@@ -9,6 +9,7 @@ export default function TilePalette({
   // size,
   activeTile,
   setActiveTile,
+  setBgTile,
 }) {
   // const { width, height } = size;
   const tilesetData = require("../../data/tilesets.json");
@@ -62,6 +63,15 @@ const {width, height} = tilesetData[tilesetGroup].size
           onChange={(tileset) => setTileset(tileset.value)}
           value={tileset}
           />
+        </div>
+        <div style={{ width: 200 , marginLeft: 8}}>
+          <button
+          onClick={() => setBgTile(activeTile)}
+          style={{
+            padding: '6px, 20px',
+            fontSize: 14
+          }}
+          >Fill Background</button>
         </div>
       </div>
       {tiles.map((row, y) => (
